@@ -1,0 +1,152 @@
+<!-- ./templates/campaign_detail.html -->
+
+{% extends "base.html" %}
+
+{% block title %}{{ campaign.name }} - Marketing Automation CRM{% endblock %}
+
+{% block content %}
+<div class="detail-page">
+    <div class="page-header">
+        <h1>{{ campaign.name }}</h1>
+        <a href="{{ url_for('marketing.campaigns') }}" class="btn btn-secondary">← Back to Campaigns</a>
+    </div>
+    
+    <div class="detail-card">
+        <h2>Campaign Details</h2>
+        <div class="detail-grid">
+            <div class="detail-item">
+                <strong>Campaign ID:</strong>
+                <span>{{ campaign.campaign_id }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>Status:</strong>
+                {% if campaign.status == 'draft' %}
+                    <span class="status-badge status-draft">Draft</span>
+                {% elif campaign.status == 'sent' %}
+                    <span class="status-badge status-sent">Sent</span>
+                {% else %}
+                    <span class="status-badge">{{ campaign.status }}</span>
+                {% endif %}
+            </div>
+            <div class="detail-item">
+                <strong>Start Date:</strong>
+                <span>{{ campaign.start_date }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>Target Segment:</strong>
+                <span>
+                    {% if segment %}
+                        <a href="{{ url_for('marketing.segment_detail', segment_id=segment.segment_id) }}">
+                            {{ segment.segment_name }}
+                        </a>
+                    {% else %}
+                        Unknown
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+        
+        <h3>Email Content</h3>
+        <div class="email-preview">
+            <div class="email-subject">
+                <strong>Subject:</strong> {{ campaign.subject }}
+            </div>
+            <div class="email-body">
+                <strong>Body:</strong>
+                <p>{{ campaign.body }}</p>
+            </div>
+        </div>
+        
+        {% if campaign.status == 'draft' %}
+        <div class="action-section">
+            <form method="POST" action="{{ url_for('marketing.send_campaign_route', campaign_id=campaign.campaign_id) }}" onsubmit="return confirm('Are you sure you want to send this campaign to {{ customers|length }} customers?');">
+                <button type="submit" class="btn btn-primary btn-large">📧 Send Campaign to {{ customers|length }} Customers</button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+    
+    {% if metrics %}
+    <div class="metrics-card">
+        <h2>Campaign Performance</h2>
+        <div class="metrics-grid">
+            <div class="metric-item">
+                <h3>{{ metrics.sent }}</h3>
+                <p>Emails Sent</p>
+            </div>
+            <div class="metric-item">
+                <h3>{{ metrics.opened }}</h3>
+                <p>Opened</p>
+            </div>
+            <div class="metric-item">
+                <h3>{{ metrics.clicked }}</h3>
+                <p>Clicked</p>
+            </div>
+            <div class="metric-item">
+                <h3>{{ metrics.converted }}</h3>
+                <p>Conversions</p>
+            </div>
+        </div>
+        
+        <div class="metrics-grid">
+            <div class="metric-item">
+                <h3>{{ metrics.open_rate }}%</h3>
+                <p>Open Rate</p>
+            </div>
+            <div class="metric-item">
+                <h3>{{ metrics.click_rate }}%</h3>
+                <p>Click-Through Rate</p>
+            </div>
+            <div class="metric-item">
+                <h3>{{ metrics.conversion_rate }}%</h3>
+                <p>Conversion Rate</p>
+            </div>
+        </div>
+        
+        <div style="margin-top: 20px;">
+            <a href="{{ url_for('marketing.analytics') }}" class="btn btn-secondary">View All Analytics</a>
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="customers-section">
+        <h2>Target Customers ({{ customers|length }})</h2>
+        
+        {% if customers %}
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Location</th>
+                        <th>Total Spent</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for customer in customers[:10] %}
+                    <tr>
+                        <td>{{ customer.customer_id }}</td>
+                        <td>{{ customer.name }}</td>
+                        <td>{{ customer.email }}</td>
+                        <td>{{ customer.location }}</td>
+                        <td>${{ "%.2f"|format(customer.total_spent) }}</td>
+                    </tr>
+                    {% endfor %}
+                    {% if customers|length > 10 %}
+                    <tr>
+                        <td colspan="5" class="text-center"><em>... and {{ customers|length - 10 }} more customers</em></td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <p>No customers in target segment.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

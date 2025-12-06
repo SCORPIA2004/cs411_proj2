@@ -1,0 +1,58 @@
+<!-- ./templates/campaigns.html -->
+
+{% extends "base.html" %}
+
+{% block title %}Campaigns - Marketing Automation CRM{% endblock %}
+
+{% block content %}
+<div class="campaigns-page">
+    <div class="page-header">
+        <h1>Marketing Campaigns</h1>
+        <a href="{{ url_for('marketing.new_campaign') }}" class="btn btn-primary">+ Create New Campaign</a>
+    </div>
+    
+    {% if campaigns %}
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Campaign Name</th>
+                    <th>Target Segment</th>
+                    <th>Start Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for campaign in campaigns %}
+                <tr>
+                    <td>{{ campaign.campaign_id }}</td>
+                    <td><strong>{{ campaign.name }}</strong></td>
+                    <td>{{ campaign.segment_name }}</td>
+                    <td>{{ campaign.start_date }}</td>
+                    <td>
+                        {% if campaign.status == 'draft' %}
+                            <span class="status-badge status-draft">Draft</span>
+                        {% elif campaign.status == 'sent' %}
+                            <span class="status-badge status-sent">Sent</span>
+                        {% else %}
+                            <span class="status-badge">{{ campaign.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('marketing.campaign_detail', campaign_id=campaign.campaign_id) }}" class="btn btn-small">View Details</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>No campaigns created yet.</p>
+        <a href="{{ url_for('marketing.new_campaign') }}" class="btn btn-primary">Create Your First Campaign</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

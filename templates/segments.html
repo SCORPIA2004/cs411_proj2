@@ -1,0 +1,66 @@
+<!-- ./templates/segments.html -->
+
+{% extends "base.html" %}
+
+{% block title %}Customer Segments - Marketing Automation CRM{% endblock %}
+
+{% block content %}
+<div class="segments-page">
+    <div class="page-header">
+        <h1>Customer Segments</h1>
+        <a href="{{ url_for('marketing.new_segment') }}" class="btn btn-primary">+ Create New Segment</a>
+    </div>
+    
+    {% if segments %}
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Segment ID</th>
+                    <th>Segment Name</th>
+                    <th>Filter Rules</th>
+                    <th>Customers</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for segment in segments %}
+                <tr>
+                    <td>{{ segment.segment_id }}</td>
+                    <td><strong>{{ segment.segment_name }}</strong></td>
+                    <td>
+                        <ul class="rules-list">
+                            {% if segment.rules.min_age %}
+                                <li>Min Age: {{ segment.rules.min_age }}</li>
+                            {% endif %}
+                            {% if segment.rules.max_age %}
+                                <li>Max Age: {{ segment.rules.max_age }}</li>
+                            {% endif %}
+                            {% if segment.rules.location %}
+                                <li>Location: {{ segment.rules.location }}</li>
+                            {% endif %}
+                            {% if segment.rules.min_total_spent %}
+                                <li>Min Spent: ${{ segment.rules.min_total_spent }}</li>
+                            {% endif %}
+                            {% if not (segment.rules.min_age or segment.rules.max_age or segment.rules.location or segment.rules.min_total_spent) %}
+                                <li>No filters (all customers)</li>
+                            {% endif %}
+                        </ul>
+                    </td>
+                    <td><span class="badge">{{ segment.customer_count }}</span></td>
+                    <td>
+                        <a href="{{ url_for('marketing.segment_detail', segment_id=segment.segment_id) }}" class="btn btn-small">View Details</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>No segments created yet.</p>
+        <a href="{{ url_for('marketing.new_segment') }}" class="btn btn-primary">Create Your First Segment</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

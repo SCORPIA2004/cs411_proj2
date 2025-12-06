@@ -1,0 +1,59 @@
+<!-- ./templates/dashboard.html -->
+
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Marketing Automation CRM{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <h1>Welcome, {{ session.username }}!</h1>
+    <p class="subtitle">Marketing Automation Dashboard</p>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>{{ stats.total_customers }}</h3>
+            <p>Total Customers</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ stats.total_segments }}</h3>
+            <p>Customer Segments</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ stats.total_campaigns }}</h3>
+            <p>Total Campaigns</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ stats.active_campaigns }}</h3>
+            <p>Active Campaigns</p>
+        </div>
+    </div>
+    
+    <div class="actions-section">
+        <h2>Quick Actions</h2>
+        <div class="action-buttons">
+            <a href="{{ url_for('marketing.segments') }}" class="btn btn-primary">
+                <span class="icon">📊</span>
+                Manage Segments
+            </a>
+            <a href="{{ url_for('marketing.campaigns') }}" class="btn btn-primary">
+                <span class="icon">📧</span>
+                Manage Campaigns
+            </a>
+            <a href="{{ url_for('marketing.analytics') }}" class="btn btn-primary">
+                <span class="icon">📈</span>
+                View Analytics
+            </a>
+        </div>
+    </div>
+    
+    <div class="info-section">
+        <h2>About This System</h2>
+        <p>This Marketing Automation module allows you to:</p>
+        <ul>
+            <li><strong>Create Customer Segments:</strong> Define target audiences based on age, location, and spending habits</li>
+            <li><strong>Manage Campaigns:</strong> Create and send marketing campaigns to specific customer segments</li>
+            <li><strong>Track Performance:</strong> Monitor campaign metrics including open rates, click-through rates, and conversions</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

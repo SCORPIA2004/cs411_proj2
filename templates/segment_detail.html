@@ -1,0 +1,86 @@
+<!-- ./templates/segment_detail.html -->
+
+{% extends "base.html" %}
+
+{% block title %}{{ segment.segment_name }} - Marketing Automation CRM{% endblock %}
+
+{% block content %}
+<div class="detail-page">
+    <div class="page-header">
+        <h1>{{ segment.segment_name }}</h1>
+        <a href="{{ url_for('marketing.segments') }}" class="btn btn-secondary">← Back to Segments</a>
+    </div>
+    
+    <div class="detail-card">
+        <h2>Segment Details</h2>
+        <div class="detail-grid">
+            <div class="detail-item">
+                <strong>Segment ID:</strong>
+                <span>{{ segment.segment_id }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>Total Customers:</strong>
+                <span class="badge">{{ customers|length }}</span>
+            </div>
+        </div>
+        
+        <h3>Filter Rules</h3>
+        <ul class="rules-list">
+            {% if segment.rules.min_age %}
+                <li>Minimum Age: {{ segment.rules.min_age }}</li>
+            {% endif %}
+            {% if segment.rules.max_age %}
+                <li>Maximum Age: {{ segment.rules.max_age }}</li>
+            {% endif %}
+            {% if segment.rules.location %}
+                <li>Location contains: {{ segment.rules.location }}</li>
+            {% endif %}
+            {% if segment.rules.min_total_spent %}
+                <li>Minimum Total Spent: ${{ segment.rules.min_total_spent }}</li>
+            {% endif %}
+            {% if not (segment.rules.min_age or segment.rules.max_age or segment.rules.location or segment.rules.min_total_spent) %}
+                <li>No filters applied (all customers included)</li>
+            {% endif %}
+        </ul>
+    </div>
+    
+    <div class="customers-section">
+        <h2>Matching Customers</h2>
+        
+        {% if customers %}
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Age</th>
+                        <th>Location</th>
+                        <th>Total Spent</th>
+                        <th>Last Purchase</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for customer in customers %}
+                    <tr>
+                        <td>{{ customer.customer_id }}</td>
+                        <td>{{ customer.name }}</td>
+                        <td>{{ customer.email }}</td>
+                        <td>{{ customer.age }}</td>
+                        <td>{{ customer.location }}</td>
+                        <td>${{ "%.2f"|format(customer.total_spent) }}</td>
+                        <td>{{ customer.last_purchase_date }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <p>No customers match this segment's criteria.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

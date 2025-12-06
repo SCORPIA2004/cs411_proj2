@@ -1,0 +1,58 @@
+<!-- ./templates/campaign_form.html -->
+
+{% extends "base.html" %}
+
+{% block title %}Create Campaign - Marketing Automation CRM{% endblock %}
+
+{% block content %}
+<div class="form-page">
+    <h1>Create New Campaign</h1>
+    <p class="subtitle">Create a marketing campaign for a customer segment</p>
+    
+    {% if not segments %}
+    <div class="alert alert-warning">
+        <strong>No segments available!</strong> You need to create at least one customer segment before creating a campaign.
+        <a href="{{ url_for('marketing.new_segment') }}">Create a segment now</a>
+    </div>
+    {% else %}
+    
+    <form method="POST" action="{{ url_for('marketing.new_campaign') }}" class="form-container">
+        <div class="form-group">
+            <label for="name">Campaign Name *</label>
+            <input type="text" id="name" name="name" class="form-control" required>
+            <small>Give your campaign a descriptive name</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="segment_id">Target Segment *</label>
+            <select id="segment_id" name="segment_id" class="form-control" required>
+                <option value="">-- Select a segment --</option>
+                {% for segment in segments %}
+                <option value="{{ segment.segment_id }}">{{ segment.segment_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="start_date">Start Date *</label>
+            <input type="date" id="start_date" name="start_date" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="subject">Email Subject *</label>
+            <input type="text" id="subject" name="subject" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="body">Email Body *</label>
+            <textarea id="body" name="body" class="form-control" rows="6" required></textarea>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Create Campaign</button>
+            <a href="{{ url_for('marketing.campaigns') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+    {% endif %}
+</div>
+{% endblock %}

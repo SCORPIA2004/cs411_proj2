@@ -1,0 +1,34 @@
+<!-- ./templates/login.html -->
+
+{% extends "base.html" %}
+
+{% block title %}Login - Marketing Automation CRM{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-box">
+        <h1>Login</h1>
+        <p class="subtitle">Marketing Automation CRM System</p>
+        
+        <form method="POST" action="{{ url_for('auth.login') }}">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" class="form-control" required autofocus>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-block">Login</button>
+        </form>
+        
+        <div class="login-help">
+            <p><strong>Default credentials:</strong></p>
+            <p>Username: <code>admin</code></p>
+            <p>Password: <code>password</code></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+<!-- ./templates/base.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Marketing Automation CRM{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="{{ url_for('marketing.dashboard') }}">Marketing Automation CRM</a>
+            </div>
+            {% if session.user_id %}
+            <ul class="nav-menu">
+                <li><a href="{{ url_for('marketing.dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('marketing.segments') }}">Segments</a></li>
+                <li><a href="{{ url_for('marketing.campaigns') }}">Campaigns</a></li>
+                <li><a href="{{ url_for('marketing.analytics') }}">Analytics</a></li>
+                <li><a href="{{ url_for('auth.logout') }}" class="logout-btn">Logout ({{ session.username }})</a></li>
+            </ul>
+            {% endif %}
+        </div>
+    </nav>
+
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Marketing Automation CRM - CS411 Project</p>
+        </div>
+    </footer>
+</body>
+</html>
