@@ -10,7 +10,7 @@
 ### 1. Clone or Download the Project
 
 ```bash
-cd ~/Desktop/Shayan/Bilkent/CS\ 411/proj2/cs411_proj2
+git clone https://github.com/SCORPIA2004/cs411_proj2.git
 ```
 
 ### 2. Create a Virtual Environment
