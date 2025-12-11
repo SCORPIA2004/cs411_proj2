@@ -99,19 +99,5 @@ python -m pytest tests/
 
 **Run specific test file:**
 ```bash
-python -m pytest tests/test_segmentation.py
-python -m pytest tests/test_campaigns.py
-python -m pytest tests/test_analytics.py
-```
-
-**Run with unittest:**
-```bash
-python -m unittest discover tests/
-```
-
-**Run individual test file with unittest:**
-```bash
-python tests/test_segmentation.py
-python tests/test_campaigns.py
-python tests/test_analytics.py
+python -m pytest tests/test_requirements.py -v
 ```
